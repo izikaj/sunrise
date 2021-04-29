@@ -26,7 +26,7 @@ describe 'Sunrise Manager Activities' do
 
       it 'should render records' do
         dom_id = ['activity', @event.id].join('_')
-        should have_selector('#' + dom_id)
+        expect(page).to have_selector('#' + dom_id)
       end
     end
   end
@@ -37,7 +37,7 @@ describe 'Sunrise Manager Activities' do
     end
 
     it 'should redirect to login page' do
-      expect(page.body).to include 'Log in'
+      expect(page).to have_content('Log in')
     end
   end
 end

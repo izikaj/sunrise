@@ -20,7 +20,7 @@ describe 'Sunrise Manager Dashboard' do
       end
 
       it 'should show page title' do
-        should have_content 'Dashboard'
+        expect(page).to have_content('Dashboard')
       end
     end
   end
@@ -31,7 +31,7 @@ describe 'Sunrise Manager Dashboard' do
     end
 
     it 'should redirect to login page' do
-      should have_content('Sign in')
+      expect(page).to have_content('Log in')
     end
   end
 end
