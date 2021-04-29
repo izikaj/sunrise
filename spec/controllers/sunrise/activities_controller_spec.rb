@@ -3,6 +3,7 @@
 require 'spec_helper'
 
 describe Sunrise::ActivitiesController, type: :controller do
+  routes { Sunrise::Engine.routes }
   render_views
 
   before(:all) do
@@ -16,20 +17,22 @@ describe Sunrise::ActivitiesController, type: :controller do
 
     it 'should render index action' do
       get :index
-      assigns(:events).should include(@event)
-      response.should render_template('index')
+
+      expect(assigns(:events)).to include(@event)
+      expect(response).to render_template('index')
     end
   end
 
   describe 'anonymous user' do
     it 'should not render index action' do
-      controller.should_not_receive(:index)
+      expect(controller).not_to receive(:index)
       get :index
     end
 
     it 'should redirect to login page' do
       get :index
-      response.should redirect_to '/users/sign_in'
+
+      expect(response).to redirect_to('/users/sign_in')
     end
   end
 end

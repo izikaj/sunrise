@@ -15,10 +15,13 @@ describe PagesController, type: :controller do
     it 'should render show action' do
       get :show, id: @page.slug
 
-      assigns(:structure).should == @page
+      # assigns(:structure).should == @page
+      expect(assigns(:structure)).to eq @page
 
-      response.should be_success
-      response.should render_template('show')
+      # response.should be_success
+      expect(response).to be_success
+      # response.should render_template('show')
+      expect(response).to render_template('show')
     end
   end
 end

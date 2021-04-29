@@ -57,6 +57,10 @@ module Sunrise
     mattr_accessor :root_route_options
     @@root_route_options = { to: 'manager#index', model_name: 'structures' }
 
+    # Default import availiability
+    mattr_accessor :available_import
+    @@available_import = false
+
     def self.scoped_views?
       @@scoped_views === true
     end

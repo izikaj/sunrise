@@ -71,7 +71,7 @@ RSpec.configure do |config|
   # == Mock Framework
   config.mock_with :rspec
 
-  config.include Devise::TestHelpers, type: :controller
+  config.include Devise::Test::ControllerHelpers, type: :controller
   config.include ControllerHelper, type: :controller
   config.extend ControllerMacros, type: :controller
 

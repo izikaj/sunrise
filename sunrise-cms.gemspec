@@ -34,7 +34,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency('carrierwave')
   s.add_dependency('galetahub-enum_field')
-  s.add_dependency('jquery-ui-rails', '>= 5.0.0')
+  s.add_dependency('jquery-ui-rails', '>= 5.0.0', '< 6.0.0')
   s.add_dependency('meta_manager', '>= 0.2.0')
   s.add_dependency('mime-types')
   s.add_dependency('mini_magick')
