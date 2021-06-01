@@ -150,6 +150,7 @@ class ImportDialog extends Dialog
     title.text(@element.data('title'))
 
     @upload_input = $('<input />', { type: 'file', class: 'import-fileupload' })
+    @loader = $('<span/>')
     @records_list = $('<ul/>')
 
     @upload_input.fileupload
@@ -158,7 +159,18 @@ class ImportDialog extends Dialog
       autoUpload: true
       uploadTemplateId: false
       downloadTemplateId: false
+      error: (jqXHR, textStatus, errorThrown) =>
+        line = $('<li>')
+        line.append(errorThrown)
+        @records_list.append(line)
+        @records_list.empty()
+        @loader.hide()
+        @records_list.show()
+        @container.removeClass('disabled')
+
       done: (e, data) =>
+        @container.addClass('disabled')
+        @records_list.empty()
         $.each data.result.files, (findex, file) =>
           $.each file.records, (rindex, record) =>
             line = $('<li>')
@@ -171,17 +183,25 @@ class ImportDialog extends Dialog
                 delete(rrr.row)
                 delete(rrr.errors)
                 line.addClass('import-invalid-error')
-                line.append($("<b>ROW: #{record.row}</b>"))
+                if record.row
+                  line.append($("<b>ROW: #{record.row}</b>"))
                 line.append($('<br/>')).append(JSON.stringify(rrr)).append($('<br/>'))
-                line.append(record.errors.join('<br/>'))
+                if Array.isArray(record.errors)
+                  line.append(record.errors.join('<br/>'))
+                else
+                  line.append(record.errors)
+
               else
-                line.append($("<b>ROW: #{record.row}</b>"))
-                line.append($('<br/>'))
-                line.append JSON.stringify(record)
+                if record.row
+                  line.append($("<b>ROW: #{record.row}</b>"))
+                  line.append($('<br/>'))
+                if Object.keys(record).length > 0
+                  line.append(JSON.stringify(record))
 
             @records_list.append(line)
+        @loader.hide()
+        @records_list.show()
 
-        @container.addClass('disabled')
         $("#records").load "#{location.pathname} #records", =>
           @container.removeClass('disabled')
 
@@ -193,9 +213,16 @@ class ImportDialog extends Dialog
     title_holder.append(title).append(@upload_input).append(buttons_holder)
 
     items_container = $ '<div/>', { class: 'import-items-holder', id: 'import_items' }
+    items_container.append(@loader)
     items_container.append(@records_list)
 
     @container.append(title_holder).append(items_container)
+
+    @upload_input.on 'fileuploadadd', (e, a,b,c,d) =>
+      @container.addClass('disabled')
+      @loader.text('Loading. Please wait...')
+      @loader.show()
+      @records_list.hide()
 
   register_observers: ->
     super

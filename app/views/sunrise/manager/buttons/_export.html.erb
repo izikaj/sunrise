@@ -1,12 +1,14 @@
-<div class="but-holder">
+<% formats = %i[csv json] %>
+<% formats << :xls if defined?(Mime::XLS) %>
+<% formats << :xlsx if defined?(Mime::XLSX) %>
+
+<div class="but-holder with-drop">
   <div class="act-but">
     <%= link_to 'CSV', export_path(format: :csv), class: 'but-container export', title: 'Export' %>
   </div>
-</div>
-<% if defined?(Mime::XLSX) %>
-  <div class="but-holder">
-    <div class="act-but">
-      <%= link_to 'XLS', export_path(format: :xlsx), class: 'but-container export', title: 'Export (XLS)' %>
-    </div>
+  <div class="drop-wrapper">
+    <% formats.each do |format| %>
+      <%= link_to format.to_s.upcase, export_path(format: format), title: "Export (.#{format})", download: "export.#{format}" %>
+    <% end %>
   </div>
-<% end %>
+</div>

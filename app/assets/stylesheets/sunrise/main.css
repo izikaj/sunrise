@@ -550,6 +550,50 @@ input[disabled].button.gray {
 	margin-right: 10px;
 }
 
+.act-buttons-wrapper .but-holder.with-drop {
+	position: relative;
+	overflow: visible;
+}
+
+.act-buttons-wrapper .but-holder.with-drop>.drop-wrapper {
+	display: none;
+	position: absolute;
+	top: 0;
+	left: 100%;
+	z-index: 99;
+	max-width: 500px;
+	background: whitesmoke;
+	border-radius: 2px;
+	border: 1px solid #e5e5e5;
+	align-items: center;
+	height: 28px;
+	column-gap: 15px;
+	padding: 0 10px;
+}
+
+.act-buttons-wrapper .but-holder.with-drop>.drop-wrapper:before, .act-buttons-wrapper .but-holder.with-drop>.drop-wrapper:after {
+	content: '';
+	display: inline-block;
+	border: 10px solid transparent;
+	border-right-color: #f5f5f5;
+	border-left: 0;
+	position: absolute;
+	left: -10px;
+}
+
+.act-buttons-wrapper .but-holder.with-drop>.drop-wrapper:before {
+	border-right-color: #e5e5e5;
+	left: -11px;
+}
+
+.act-buttons-wrapper .but-holder .drop-wrapper a {
+	color: #737373;
+}
+
+.act-buttons-wrapper .but-holder.with-drop:hover>.drop-wrapper {
+	display: flex;
+}
+
 .act-buttons-wrapper .but-holder:first-child {
 	margin-right: 13px;
 }
@@ -688,6 +732,12 @@ input[disabled].button.gray {
 	background: #f5f5f5 url(/assets/sunrise/icons/import.svg) center/auto 75% no-repeat;
 	opacity: 0.6;
 	transition: opacity ease 0.2s;
+}
+
+.act-but .but-container.import.disabled, .act-but .but-container.export.disabled {
+	background-position: center !important;
+	opacity: 0.4;
+	pointer-events: none;
 }
 
 .act-but .but-container.export {
