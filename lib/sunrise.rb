@@ -14,6 +14,7 @@ module Sunrise
   autoload :Utils, 'sunrise/utils'
   autoload :Config, 'sunrise/config'
   autoload :AbstractModel, 'sunrise/abstract_model'
+  autoload :Renderers, 'sunrise/renderers'
 
   module Models
     autoload :Asset, 'sunrise/models/asset'

@@ -37,6 +37,20 @@ module Sunrise
         end
       end
 
+      def stream
+        @stream ||= Enumerator.new do |yielder|
+          yielder << CSV.generate_line(human_columns_names)
+
+          each_with_index do |record, _index|
+            row = columns_names.each_with_object([]) do |column, result|
+              result << record.send(column)
+            end
+
+            yielder << CSV.generate_line(row)
+          end
+        end
+      end
+
       def each_with_index
         count = 0
 

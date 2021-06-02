@@ -59,27 +59,26 @@ module Sunrise
 
     def export
       @records = abstract_model.apply_scopes(params, false)
+      export_options = abstract_model.export_options
 
       respond_to do |format|
         format.xml  { render xml: @records }
-        format.json { render json: @records }
-        format.csv  { render abstract_model.export_options.merge(csv: @records) }
 
-        format.xlsx { render abstract_model.export_options.merge(xlsx: @records) } if defined?(Mime::XLSX)
+        # streaming json/csv
+        format.json { render export_options.merge(stream_json: @records) }
+        format.csv  { render export_options.merge(stream_csv: @records) }
+
+        # render xlsx spreadsheet
+        format.xlsx { render export_options.merge(xlsx: @records) } if defined?(Mime::XLSX)
+
+        format.all { redirect_to scoped_index_path }
       end
     end
 
     def import
       return render plain: 'Unacceptable', status: 422 unless import_possible?
 
-      @files = import_process_uploaded_files
-
-      respond_to do |format|
-        format.html { redirect_to scoped_index_path }
-        format.json do
-          render json: { files: @files }
-        end
-      end
+      abstract_model.model.sunrise_dnd_import(self, params)
     end
 
     def sort
@@ -102,39 +101,15 @@ module Sunrise
 
     protected
 
-    def import_process_uploaded_files
-      raw_files = params['files']
-      return [] if raw_files.blank?
-
-      raw_files.each_with_object([]) do |file, obj|
-        results = abstract_model.model.public_send(:sunrise_import, file)
-        results = render_imported_results(results, file)
-
-        obj << { name: file.original_filename, records: results }
-      end
-    end
-
-    def render_imported_results(results, file)
-      return results unless import_custom_render?
-
-      abstract_model.model.send(:sunrise_import_results_renderer, results, file)
-    end
-
     def import_possible?
-      abstract_model.model.methods.include?(:sunrise_import)
-    end
-
-    def import_custom_render?
-      abstract_model.model.methods.include?(:sunrise_import_results_renderer)
+      abstract_model.model.respond_to?(:sunrise_dnd_import)
     end
 
     def find_model
       @abstract_model = Utils.get_model(params[:model_name], params)
-      if @abstract_model.nil?
-        raise ActionController::RoutingError, "Sunrise model #{params[:model_name]} not found"
-      end
+      return @abstract_model if @abstract_model.present?
 
-      @abstract_model
+      raise ActionController::RoutingError, "Sunrise model #{params[:model_name]} not found"
     end
 
     def abstract_model

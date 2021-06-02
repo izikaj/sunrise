@@ -1,5 +1,4 @@
-<% formats = %i[csv json] %>
-<% formats << :xls if defined?(Mime::XLS) %>
+<% formats = %i[csv xml json] %>
 <% formats << :xlsx if defined?(Mime::XLSX) %>
 
 <div class="but-holder with-drop">

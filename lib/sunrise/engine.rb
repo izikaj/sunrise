@@ -32,10 +32,9 @@ module Sunrise
     end
 
     initializer 'sunrise.csv_renderer' do
-      ::ActionController::Renderers.add :csv do |collection, options|
-        doc = Sunrise::Utils::CsvDocument.new(collection, options)
-        send_data(doc.render, filename: doc.filename, type: Mime::CSV, disposition: 'attachment')
-      end
+      ::Sunrise::Renderers::Csv.declare!
+      ::Sunrise::Renderers::StreamCsv.declare!
+      ::Sunrise::Renderers::StreamJson.declare!
     end
   end
 end

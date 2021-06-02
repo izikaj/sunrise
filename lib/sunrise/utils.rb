@@ -6,6 +6,7 @@ module Sunrise
     autoload :EvalHelpers, 'sunrise/utils/eval_helpers'
     autoload :CsvDocument, 'sunrise/utils/csv_document'
     autoload :SearchWrapper, 'sunrise/utils/search_wrapper'
+    autoload :Exporter, 'sunrise/utils/exporter'
 
     IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg',
                    'image/pjpeg', 'image/tiff', 'image/x-png'].freeze
